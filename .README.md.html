@@ -640,14 +640,14 @@ function setDocumentScrollTop(ypos)
 </head>
 <body class="markdown-body">
 <h1> <a id="kafka-docker" class="anchor" href="#kafka-docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>kafka-docker</h1> 
-<p>kafka-poc kafka-docker : Run kafka with docker.</p> 
+<p>Person Event Topic: dst.hs.kafkapoc.personevent</p> 
 <hr /> 
 <h2> <a id="install-oracle-virtualbox" class="anchor" href="#install-oracle-virtualbox" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install Oracle Virtualbox</h2> 
 <ul> 
  <li><a href="https://www.virtualbox.org/" rel="nofollow">https://www.virtualbox.org/</a></li> 
 </ul> 
 <hr /> 
-<h2> <a id="install-docker-toolbox" class="anchor" href="#install-docker-toolbox" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install docker toolbox</h2> 
+<h2> <a id="install-docker-toolbox" class="anchor" href="#install-docker-toolbox" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install Docker Toolbox</h2> 
 <ul> 
  <li><a href="https://docs.docker.com/toolbox/toolbox_install_windows/" rel="nofollow">https://docs.docker.com/toolbox/toolbox_install_windows/</a></li> 
  <li>Start the docker toolbox from the Docker Quickstart shortcut: 
@@ -661,6 +661,36 @@ function setDocumentScrollTop(ypos)
     <ul> 
      <li>D:\Dev\tools\Git\bin\bash.exe --login -i D:\Dev\Tools\DockerToolbox\start.sh</li> 
     </ul> </li> 
+  </ul> </li> 
+</ul> 
+<hr /> 
+<h2> <a id="landoop-lenses-docker-image-for-zookeeperkafka-development-cluster" class="anchor" href="#landoop-lenses-docker-image-for-zookeeperkafka-development-cluster" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Landoop Lenses Docker Image for Zookeeper/Kafka Development Cluster</h2> 
+<ul> 
+ <li><a href="https://docs.lenses.io/dev/lenses-box/" rel="nofollow">https://docs.lenses.io/dev/lenses-box/</a></li> 
+ <li>To get a license: <a href="https://www.landoop.com/downloads/lenses/" rel="nofollow">https://www.landoop.com/downloads/lenses/</a> </li> 
+ <li>landoop/kafka-lenses-dev</li> 
+ <li>Docker run: (from the docker toolbox command line started from the docker toolbox shortcut) 
+  <ul> 
+   <li> <p>change to the lenses directory</p> <pre><code>```
+docker run -e ADV_HOST=192.168.99.100 -e LICENSE=&quot;$(cat license.json)&quot; --rm --name lenses -p 3030:3030 -p 9092:9092 -p 2181:2181 -p 8081:8081 -p 9581:9581 -p 9582:9582 -p 9584:9584 -p 9585:9585 landoop/kafka-lenses-dev
+```
+</code></pre> </li> 
+  </ul> </li> 
+ <li>Command Line tools for kafka: 
+  <ul> 
+   <li>docker exec -it lenses bash 
+    <ul> 
+     <li> 
+      <blockquote> 
+       <p>kafka-topics --zookeeper 192.168.99.100:2181 --list</p> 
+      </blockquote> </li> 
+    </ul> </li> 
+  </ul> </li> 
+ <li>docker run -e ADV_HOST=192.168.99.100 -e EULA=&quot;<a href="https://dl.lenses.stream/d/?id=028aae84-0e58-4bcf-9333-6c00d7025799" rel="nofollow">https://dl.lenses.stream/d/?id=028aae84-0e58-4bcf-9333-6c00d7025799</a>&quot; --rm --name lenses -p 3030:3030 -p 9092:9092 -p 2181:2181 -p 8081:8081 -p 9581:9581 -p 9582:9582 -p 9584:9584 -p 9585:9585 landoop/kafka-lenses-dev 
+  <ul> 
+   <li>Lenses and Kafka will be available in about 30-45 seconds at <a href="http://192.168.99.100:3030" rel="nofollow">http://192.168.99.100:3030</a>.</li> 
+   <li>The default credentials are admin / admin.</li> 
+   <li>To disable the sample data generators you can add -e SAMPLEDATA=0.</li> 
   </ul> </li> 
 </ul> 
 <hr /> 
@@ -754,6 +784,25 @@ function setDocumentScrollTop(ypos)
      <li>docker run --rm -it --net=host landoop/fast-data-dev bash</li> 
     </ul> </li> 
   </ul> </li> 
+</ul> 
+<hr /> 
+<h2> <a id="yahoo-kafka-monitor" class="anchor" href="#yahoo-kafka-monitor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Yahoo Kafka Monitor</h2> 
+<ul> 
+ <li>Opensource kafka monitoring app</li> 
+ <li><a href="https://github.com/yahoo/kafka-manager">https://github.com/yahoo/kafka-manager</a></li> 
+ <li><a href="https://hub.docker.com/r/dockerkafka/kafka-manager/" rel="nofollow">https://hub.docker.com/r/dockerkafka/kafka-manager/</a></li> 
+ <li><a href="https://github.com/DockerKafka/kafka-manager-docker">https://github.com/DockerKafka/kafka-manager-docker</a></li> 
+ <li> <a href="https://www.youtube.com/watch?v=JInLMIKLEOI" rel="nofollow">https://www.youtube.com/watch?v=JInLMIKLEOI</a> (totorial - Kafka Manager - Multi Node Single Broker)</li> 
+ <li>docker run -d --name kafkadocker_zookeeper_1 dockerkafka/zookeeper</li> 
+ <li>docker run -d --name kafkadocker_kafka_1 --link kafkadocker_zookeeper_1:zookeeper dockerkafka/kafka</li> 
+ <li>docker run -it --rm --link kafkadocker_zookeeper_1:zookeeper --link kafkadocker_kafka_1:kafka -p 9000:9000 -e ZK_HOSTS=zookeeper:2181 dockerkafka/kafka-manager</li> 
+</ul> 
+<hr /> 
+<h2> <a id="kafdrop" class="anchor" href="#kafdrop" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>KafDrop</h2> 
+<ul> 
+ <li>Opensource spring boot app for monitoring kafka clusters</li> 
+ <li><a href="https://github.com/HomeAdvisor/Kafdrop">https://github.com/HomeAdvisor/Kafdrop</a></li> 
+ <li><a href="https://homeadvisor.tech/kafdrop-2-0-kafka-apis-search-more/" rel="nofollow">https://homeadvisor.tech/kafdrop-2-0-kafka-apis-search-more/</a></li> 
 </ul>
 </body>
 </html>
